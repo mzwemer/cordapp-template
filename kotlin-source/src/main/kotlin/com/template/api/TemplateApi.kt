@@ -1,5 +1,6 @@
 package com.template.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import net.corda.core.messaging.CordaRPCOps
 import javax.ws.rs.GET
 import javax.ws.rs.PUT
@@ -11,6 +12,8 @@ import javax.ws.rs.core.Response
 // This API is accessible from /api/template. The endpoint paths specified below are relative to it.
 @Path("template")
 class TemplateApi(val services: CordaRPCOps) {
+    private val mapper = ObjectMapper()
+
     /**
      * Accessible at /api/template/templateGetEndpoint.
      */
@@ -18,7 +21,9 @@ class TemplateApi(val services: CordaRPCOps) {
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
     fun templateGetEndpoint(): Response {
-        return Response.accepted().entity("Template GET endpoint.").build()
+        val entity = mapper.createObjectNode()
+                .put("name", "Template GET endpoint.")
+        return Response.ok(entity).build()
     }
 
     /**
@@ -27,6 +32,6 @@ class TemplateApi(val services: CordaRPCOps) {
     @PUT
     @Path("templatePutEndpoint")
     fun templatePutEndpoint(payload: Any): Response {
-        return Response.accepted().entity("Template PUT endpoint.").build()
+        return Response.ok("Template PUT endpoint.").build()
     }
 }
